@@ -1,0 +1,1091 @@
+---
+title: "DPA_PRoject"
+output: pdf_document
+---
+
+```{r}
+
+# Load the tidyverse library, which includes various packages for data manipulation.
+library(tidyverse)
+
+# Read a CSV file named "energy.csv" and store its contents in the 'energy' variable.
+energy<-read.csv("energy.csv")
+```
+
+
+```{r}
+
+#Now lets read the data and also lets analyse its summary
+summary(energy)
+
+
+
+```
+```{r}
+
+# recontruct the dataset by replacing the old column names  to a new column names  
+
+country <- energy$Entity
+year <- energy$Year
+E1 <- energy$Access.to.electricity....of.population.
+E2 <- energy$Access.to.clean.fuels.for.cooking 
+E3 <- energy$Renewable.electricity.generating.capacity.per.capita
+E4 <- energy$Financial.flows.to.developing.countries..US...
+E5 <- energy$Renewable.energy.share.in.the.total.final.energy.consumption....
+E6 <- energy$Electricity.from.fossil.fuels..TWh.
+E7 <- energy$Electricity.from.nuclear..TWh.
+E8 <- energy$Electricity.from.renewables..TWh.
+E9 <- energy$Low.carbon.electricity....electricity.
+E10 <- energy$Primary.energy.consumption.per.capita..kWh.person.
+E11 <- energy$Energy.intensity.level.of.primary.energy..MJ..2017.PPP.GDP.
+E12 <- energy$Value_co2_emissions_kt_by_country
+E13 <- energy$Renewables....equivalent.primary.energy.
+E14 <- energy$gdp_growth
+E15 <- energy$gdp_per_capita
+E16 <- energy$Density.n.P.Km2.
+E17 <- energy$Land.Area.Km2.
+E18 <- energy$Latitude
+E19 <- energy$Longitude
+
+#create a new dataframe with name energy_df and update it with new column names and data
+energy_df <- data.frame(country,	year,	E1,	E2,	E3,	E4,	E5,	E6,	E7,	E8,	E9,	E10, E11,	E12,	E13,	E14,	E15,	E16,	E17,	E18,	E19)
+str(energy_df)
+
+```
+```{r}
+#Size od dataframe
+dim(energy_df)
+```
+
+
+```{r}
+# Counting the total number of missing values in each columns
+missing_values_count <- colSums(is.na(energy_df))
+
+# Print the missing values count for each column
+print(missing_values_count)
+
+```
+
+
+```{r}
+# Finding out percentage of all missing values of each column
+missing_percentage <- round(colMeans(is.na(energy_df)) * 100, 2)
+
+# Print the missing percentage for each column
+print(missing_percentage)
+
+```
+```{r}
+# Remove rows with missing values in the specified columns without altering other columns
+energy_df <- energy_df[complete.cases(energy_df[, c("E17", "E18", "E19")]), ]
+
+# Print the resulting 'energy_df' dataframe
+head(energy_df)
+
+
+
+#After removing the missing values of E16,E17,E18 &E19 we will see again count of missing values
+# Counting the total number of missing values in each columns
+missing_values_count <- colSums(is.na(energy_df))
+
+# Print the missing values count for each column
+missing_values_count
+
+```
+
+
+
+```{r}
+
+#finding and replacing the missing values of E1 i.e Access.to.electricity....of.population.
+
+#unique(energy_df$E1)
+
+missing_values_count_e1 <- sum(is.na(energy_df$E1))
+print(missing_values_count_e1)
+
+# Calculate the mean of the "E1" column
+median_E1 <- median(energy_df$E1, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E1[is.na(energy_df$E1)] <- median_E1
+
+missing_values_count_e1
+
+
+
+```
+```{r}
+#finding and replacing the missing values of E2 i.e Access.to.clean fuel for cooking.
+
+#unique(energy_df$E2)
+summary(energy_df$E2)
+
+missing_values_count_e2 <- sum(is.na(energy_df$E2))
+print(missing_values_count_e2)
+
+# Calculate the mean of the "E2" column
+median_E2 <- median(energy_df$E2, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E2[is.na(energy_df$E2)] <- median_E2
+
+
+
+missing_values_count_e2
+```
+
+```{r}
+#finding and replacing the missing values of E3 i.e Renewable.electricity.generating.capacity.per.capita
+
+#unique(energy_df$E3)
+summary(energy_df$E3)
+
+missing_values_count_e3 <- sum(is.na(energy_df$E3))
+print(missing_values_count_e3)
+
+# Calculate the mean of the "E3" column
+median_E3 <- median(energy_df$E3, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E3[is.na(energy_df$E3)] <- median_E3
+
+
+
+missing_values_count_e3
+```
+
+```{r}
+#finding and replacing the missing values of E4 i.e Financial flow to developing countries.
+
+
+#unique(energy_df$E4)
+summary(energy_df$E4)
+
+missing_values_count_e4 <- sum(is.na(energy_df$E4))
+print(missing_values_count_e4)
+
+# Calculate the mean of the "E4" column
+median_e4 <- median(energy_df$E4, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E4[is.na(energy_df$E4)] <- median_e4
+
+
+
+missing_values_count_e4
+```
+
+
+
+
+
+
+```{r}
+#finding and replacing the missing values of E5 i.e Renewable energy share in total final energy consumption.
+
+
+#unique(energy_df$E5)
+summary(energy_df$E5)
+
+missing_values_count_e5 <- sum(is.na(energy_df$E5))
+print(missing_values_count_e5)
+
+# Calculate the mean of the "E5" column
+median_e5 <- median(energy_df$E5, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E5[is.na(energy_df$E5)] <- median_e5
+
+
+
+missing_values_count_e5
+
+```
+
+```{r}
+#finding and replacing the missing values of E6 i.e Electricity from fossil fuels (TWh)
+
+
+#unique(energy_df$E6)
+summary(energy_df$E6)
+
+missing_values_count_e6 <- sum(is.na(energy_df$E6))
+print(missing_values_count_e6)
+
+# Calculate the mean of the "E6" column
+median_e6 <- median(energy_df$E6, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E6[is.na(energy_df$E6)] <- median_e6
+
+
+
+missing_values_count_e6
+```
+
+```{r}
+#finding and replacing the missing values of E7 i.e Electricity from Nuclear (TWh)
+
+
+#unique(energy_df$E7)
+summary(energy_df$E7)
+missing_values_count_e7 <- sum(is.na(energy_df$E7))
+print(missing_values_count_e7)
+
+# Calculate the mean of the "E6" column
+median_e7 <- median(energy_df$E7, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E7[is.na(energy_df$E7)] <- median_e7
+
+
+
+missing_values_count_e7
+
+```
+
+```{r}
+#finding and replacing the missing values of E8 i.e Electricity from renewable (TWh)
+
+
+#unique(energy_df$E8)
+summary(energy_df$E8)
+missing_values_count_e8 <- sum(is.na(energy_df$E8))
+print(missing_values_count_e8)
+
+# Calculate the mean of the "E6" column
+median_e8 <- median(energy_df$E8, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E8[is.na(energy_df$E8)] <- median_e8
+
+
+missing_values_count_e8
+```
+
+```{r}
+#finding and replacing the missing values of E9 i.e Percentage of electricity from low-carbon sources (nuclear and renewables)
+
+
+#unique(energy_df$E9)
+summary(energy_df$E9)
+missing_values_count_e9 <- sum(is.na(energy_df$E9))
+print(missing_values_count_e9)
+
+# Calculate the mean of the "E6" column
+median_e9 <- median(energy_df$E9, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E9[is.na(energy_df$E9)] <- median_e9
+
+
+missing_values_count_e9
+```
+
+```{r}
+#finding and replacing the missing values of E11 i.e Energy intensity level of primary energy (MJ/$2011 PPP GDP): Energy use per unit of GDP at purchasing power parity.
+
+
+#unique(energy_df$E11)
+summary(energy_df$E11)
+
+missing_values_count_e11 <- sum(is.na(energy_df$E11))
+print(missing_values_count_e11)
+
+# Calculate the median of the "E11" column
+median_e11 <- median(energy_df$E11, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E11[is.na(energy_df$E11)] <- median_e11
+
+
+
+missing_values_count_e11
+
+```
+
+```{r}
+#finding and replacing the missing values of E12 i.e Value_co2_emissions (metric tons per capita): Carbon dioxide emissions per person in metric tons.
+
+
+#unique(energy_df$E12)
+summary(energy_df$E12)
+
+missing_values_count_e12 <- sum(is.na(energy_df$E12))
+print(missing_values_count_e12)
+
+# Calculate the mean of the "E11" column
+median_e12 <- median(energy_df$E12, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E12[is.na(energy_df$E12)] <- median_e12
+
+
+
+missing_values_count_e12
+```
+
+```{r}
+#finding and replacing the missing values of E13 i.e Renewables (% equivalent primary energy)
+
+
+#unique(energy_df$E13)
+summary(energy_df$E13)
+missing_values_count_e13 <- sum(is.na(energy_df$E13))
+print(missing_values_count_e13)
+
+# Calculate the mean of the "E13" column
+median_e13 <- median(energy_df$E13, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E13[is.na(energy_df$E13)] <- median_e13
+
+
+
+missing_values_count_e13
+```
+
+```{r}
+#finding and replacing the missing values of E14 i.e GDP growth (annual %)
+
+
+#unique(energy_df$E14)
+summary(energy_df$E14)
+missing_values_count_e14 <- sum(is.na(energy_df$E14))
+print(missing_values_count_e14)
+
+# Calculate the mean of the "E14" column
+median_e14 <- median(energy_df$E14, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E14[is.na(energy_df$E14)] <- median_e14
+
+
+
+missing_values_count_e14
+```
+
+
+
+```{r}
+#finding and replacing the missing values of E15 i.e GDP per capita
+
+
+#unique(energy_df$E15)
+summary(energy_df$E15)
+missing_values_count_e15 <- sum(is.na(energy_df$E15))
+print(missing_values_count_e15)
+
+# Calculate the mean of the "E13" column
+median_e15 <- median(energy_df$E15, na.rm = TRUE)
+
+# Replace missing values with the mean
+energy_df$E15[is.na(energy_df$E15)] <- median_e15
+
+
+
+missing_values_count_e15
+```
+
+```{r}
+
+final_missing_values<- colSums(is.na(energy_df))
+
+# Print the missing values count for each column
+print(final_missing_values)
+```
+```{r}
+write.csv(energy_df, file = 'final_energy_df.csv', row.names = FALSE)
+```
+
+
+
+Now we dont have missing values Now lets start Analysis part 
+
+```{r}
+size_sum(energy_df)
+```
+
+**Exploratory Data Analysis**
+
+
+# Global Energy Trends Visualization
+
+**Scatterplot of Electricity Access vs GDP Per Capita**
+
+```{r}
+
+# Create the scatterplot with regression line
+ggplot(energy_df, aes(x = E15, y = E1)) +
+  geom_point(alpha = 0.3) +  # Scatterplot with transparency
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
+  labs(title = "Electricity Access vs GDP Per Capita", x = "GDP Per Capita", y = "Electricity Access (% Population)") +
+  theme_minimal() 
+
+```
+**Insights:**
+
+- There is a clear positive correlation between GDP per capita and electricity access; as the economic output per person rises, so does the percentage of the population with access to electricity.
+
+- At the higher end of GDP per capita, electricity access is consistently near 100%, indicating that higher economic wealth is associated with universal or near-universal electricity access.
+
+- Among countries with lower GDP per capita, there is a significant variation in electricity access, with some outliers having high access rates. This suggests factors other than GDP, such as government policies or international aid, may significantly influence electricity infrastructure.
+
+
+
+**Scatterplot of Renewable Share vs GDP Growth**
+
+```{r}
+
+# Create the scatterplot with regression line
+ggplot(energy_df, aes(x = E14, y = E5)) +
+  geom_point(alpha = 0.3) +  # Scatterplot with transparency
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
+  labs(title = "Renewable Share vs GDP Growth", x = "GDP Growth (%)", y = "Renewable Share (%)") +
+  theme_minimal() 
+
+```
+**Insights**
+
+- The data suggests a positive relationship between GDP growth and the share of renewable energy, meaning that as GDP growth increases, the share of renewable energy in a country's energy mix also tends to increase.
+
+- There are outliers with high renewable share percentages across different rates of GDP growth, including some with negative GDP growth. This indicates that factors other than economic growth can significantly impact renewable energy adoption.
+
+- Despite the positive trend, the renewable share does not exceed a certain percentage, even at high levels of GDP growth. This may suggest there are other limiting factors at play that prevent a full transition to renewable energy sources.
+
+- The relationship between GDP growth and renewable share is not strictly linear. While there's a general upward trend, the wide spread of points indicates that the increase in GDP growth does not always correspond to a proportionate increase in renewable share.
+
+
+
+**Scatterplot of Renewable Share vs Electricity Access**
+
+```{r}
+
+# Create the scatterplot with regression line
+ggplot(energy_df, aes(x = E14, y = E1)) +
+  geom_point(alpha = 0.3) +  # Scatterplot with transparency
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
+  labs(title = "Renewable Share vs Electricity Access", x = "Renewable Share (%)", y = "Electricity Access (% Population)") +
+  theme_minimal() 
+```
+**Insights:**
+
+- The trend line suggests a negative correlation between the renewable share of energy and electricity access percentage. As the renewable share increases, the percentage of the population with access to electricity seems to decrease.
+
+- A dense cluster of data points is present where the renewable share is low, which implies that most of the sampled entities have a low percentage of renewable energy in their mix and varying levels of electricity access.
+
+- There are a few outliers with a very high renewable share and very low electricity access, suggesting that certain regions may be investing in renewable energy without having widespread electricity access.
+
+
+**Renewable Share Over Time**
+
+```{r}
+
+# Calculate the average of Renewable energy share over time
+avg_renewable_share <- energy_df %>%
+  group_by(year) %>%
+  summarise(Avg_Renewable_Share = mean(E5))
+
+# Create the line plot for the average
+ggplot(avg_renewable_share, aes(x = year, y = Avg_Renewable_Share)) +
+  geom_line(color = "blue") +  # Line plot with blue color
+  labs(title = "Average Renewable Share Over Time", x = "Year", y = "Average Renewable Share (%)") +
+  theme_minimal() 
+  
+
+```
+**Insights:**
+
+- There is an overall decreasing trend in the average renewable share from the year 2000 until around 2015. This suggests that, on average, the reliance on renewable energy sources has diminished over this period.
+
+- There is a sharp increase in the average renewable share starting from around 2015, indicating a recent surge in the use of renewable energy sources compared to the previous years.
+
+- The graph shows some fluctuations, particularly noticeable between 2010 and 2015, which could be attributed to economic, policy, or market changes impacting renewable energy deployment.
+
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(reshape2)
+
+# Assuming your DataFrame 'energy_df' is already loaded
+# Drop unnecessary columns 'country' and 'year'
+df_subset <- energy_df[, !(names(energy_df) %in% c("country", "year"))]
+
+# Convert all columns to numeric
+df_subset[] <- lapply(df_subset, function(x) as.numeric(as.character(x)))
+
+# Remove any columns that could not be converted to numeric
+df_subset <- df_subset[, sapply(df_subset, is.numeric)]
+
+# Compute the correlation matrix
+corr_matrix <- cor(df_subset, use = "complete.obs")
+
+# Melt the correlation matrix
+corr_melted <- melt(corr_matrix)
+
+# Create the heatmap using ggplot
+ggplot(data = corr_melted, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                       midpoint = 0, limit = c(-1, 1), space = "Lab", 
+                       name="Correlation") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  labs(title = "Correlation Heatmap", x = "", y = "")
+
+
+```
+Insights: 
+
+- There is A Strong positive correlation between E1 and E2, E6 and E8, E8 and E12, E12 and E6
+- There is no correlation between E1-E4,E3TOE6-E19,E4-E11,E15TOE18-E19
+- There is a Strong negative correlation between E1-E5,E2-E5
+
+
+# Now let us Move to Feature Selection and Modelling
+
+
+#1. Primary.energy.consumption.per.capita..kWh.person
+
+```{r}
+
+# Load necessary libraries
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(rlang)
+
+ 
+# Set options
+options(repr.plot.width=10, repr.plot.height=6)
+ 
+# Read the CSV file
+df <- read.csv("final_energy_df.csv")
+ 
+
+# Rename the columns
+#colnames(df) <- new_column_names
+
+# View the first few rows of the updated dataframe
+head(df)
+
+# Display data types of columns
+print(sapply(df, class))
+ 
+# Convert 'Density (P/km2)' column to numeric
+df$`E16` <- as.numeric(gsub(",", "", df$`E16`))
+ 
+# Display data types after conversion
+print(sapply(df, class))
+ 
+# Display the dimensions of the data frame
+print(dim(df))
+ 
+# Remove duplicate rows based on 'Entity' and 'Year'
+df <- df[!duplicated(df[c('country', 'year')]), ]
+ 
+
+ 
+# Drop unnecessary columns
+df <- df[, !(names(df) %in% c('E18', 'E19'))]
+ 
+
+
+# Remove the 20th column
+df <- df[, -20]
+
+# Remove the 21th column
+df <- df[, -21] 
+
+# Create a subset of the data frame
+df_subset <- df[c('country', 'year', 'E1', 'E2')]
+
+# Load necessary libraries for machine learning
+library(caret)
+library(randomForest)
+library(gbm)
+
+# Assuming 'df' is your dataframe and it has been previously loaded into your R session
+
+# Correct target variable name
+target <- 'E10'
+
+# Correct features variable names based on the provided list
+features <- c(
+  'E1',
+  'E15', 
+  'E4',
+  "E5",  
+  'E6'
+)
+
+# Check for missing values and create a subset of the data
+# Ensure that there are no missing values in the target and feature columns
+if(any(colSums(is.na(df[, c(target, features)])) > 0)){
+  # Handle missing values according to your data needs, this is an example
+  df[is.na(df)] <- 0
+}
+
+# Now, create a subset of the data for machine learning, making sure there are no missing values in these columns
+ml_subset <- df[, c(target, features)]
+
+# Ensure that ml_subset has at least 2 rows and no missing values
+if(nrow(ml_subset) < 2) {
+  stop("Not enough data points after subsetting.")
+}
+
+# Define predictors and response variable
+x <- ml_subset[, features]
+y <- ml_subset[, target]
+
+# Impute missing values and standardize the predictors
+preproc <- preProcess(x, method = c('medianImpute', 'center', 'scale'))
+x_imputed <- predict(preproc, x)
+
+# Split the data into training and testing sets
+set.seed(42)
+index <- createDataPartition(y, p = 0.6, list = FALSE)
+x_train <- x_imputed[index, ]
+y_train <- y[index]
+x_test <- x_imputed[-index, ]
+y_test <- y[-index]
+
+# Continue with the rest of your modeling code...
+
+# Note: Since the rest of the code depends on a successful data partition, 
+# it will not execute if the above condition is not met.
+
+
+# Train Gradient Boosting model with best parameters
+set.seed(42) # For reproducibility when training
+gradient_boosting_model <- gbm(
+  formula = y_train ~ .,
+  data = data.frame(y_train, x_train),
+  distribution = "gaussian",
+  n.trees = best_gb_params$n.trees,
+  interaction.depth = best_gb_params$interaction.depth,
+  n.minobsinnode = best_gb_params$n.minobsinnode,
+  shrinkage = best_gb_params$shrinkage,
+  verbose = FALSE # to avoid verbose output
+)
+
+# Train Linear Regression model
+linear_regression_model <- lm(y_train ~ ., data = data.frame(y_train, x_train))
+
+# Make predictions on the test set
+rf_predictions <- predict(random_forest_model, newdata = x_test)
+lr_predictions <- predict(linear_regression_model, newdata = x_test)
+gb_predictions <- predict(gradient_boosting_model, newdata = x_test, n.trees = best_gb_params$n.trees)
+
+# Calculate mean squared error and R-squared for each model
+rf_mse <- mean((rf_predictions - y_test)^2)
+lr_mse <- mean((lr_predictions - y_test)^2)
+gb_mse <- mean((gb_predictions - y_test)^2)
+
+rf_r2 <- 1 - rf_mse / var(y_test)
+lr_r2 <- 1 - lr_mse / var(y_test)
+gb_r2 <- 1 - gb_mse / var(y_test)
+
+# Create a results data frame
+results <- data.frame(
+  Model = c("Random Forest", "Linear Regression", "Gradient Boosting"),
+  MSE = c(rf_mse, lr_mse, gb_mse),
+  R_squared = c(rf_r2, lr_r2, gb_r2)
+)
+
+# Print the results
+print(results)
+
+
+```
+Based on above analysis Mean Squared Error (MSE) and R-squared values for three different models, the Gradient Boosting model shows the best performance for the given data. It has the highest R-squared value of 0.9191854, indicating that it explains approximately 91.92% of the variance in the target variable. The R-squared value is a measure of how well the model's predictions approximate the actual data, with a higher value generally indicating a better fit to the data.
+
+
+NOw lets predict next 5 years of E10 values using gradient boosting
+
+```{r}
+
+# Assuming you have a dataframe 'df' with historical data, and you've already trained 'gradient_boosting_model'
+
+# Step 1: Prepare Data
+# Extract the previous 10 years of data for E10 and features
+historical_data <- df[11:(nrow(df)), ]  # Assuming your dataset has at least 10 years of data
+features <- c('E1', 'E15', 'E4', 'E5', 'E6')
+
+# Step 2: Trained Gradient Boosting Model (already done)
+
+# Step 3: Prepare Data for Prediction
+# Create a dataframe for the next 5 years of feature values
+next_5_years <- 2021:2025  # Adjust the years as needed
+future_features <- data.frame(
+  E1 = historical_data$E1[(nrow(historical_data) - 9):nrow(historical_data)],
+  E15 = historical_data$E15[(nrow(historical_data) - 9):nrow(historical_data)],
+  E4 = historical_data$E4[(nrow(historical_data) - 9):nrow(historical_data)],
+  E5 = historical_data$E5[(nrow(historical_data) - 9):nrow(historical_data)],
+  E6 = historical_data$E6[(nrow(historical_data) - 9):nrow(historical_data)]
+)
+
+# Step 4: Make Predictions
+# Preprocess the future data using the same preprocessing steps
+future_features_imputed <- predict(preproc, future_features)
+
+# Predict E10 for the next 5 years using the Gradient Boosting model
+future_predictions <- predict(gradient_boosting_model, newdata = future_features_imputed, n.trees = best_gb_params$n.trees)
+
+# Create a data frame to display predictions with corresponding years
+predictions_df <- data.frame(Year = next_5_years, E10_Predictions = future_predictions)
+
+# Print the predictions for the next 5 years
+print(predictions_df)
+
+
+
+```
+The above is next 5 year E10 Predictions using gradient Boosting
+
+# 2. Renewable energy share in the total final energy consumption (%)(E5)
+
+```{r}
+# Load necessary libraries
+library(tidyverse)
+library(plotly)
+library(leaflet)
+library(caTools) # Add this line to load caTools
+
+# Read the CSV file
+global_co2 <- read.csv("final_energy_df.csv")
+
+# Select features
+selected_features <- c('year', 'E15', 'E10',
+                        'E1', 'E12')
+ 
+X <- global_co2[selected_features]
+y <- global_co2$`E5`
+
+# Split data into training and testing sets
+set.seed(42)
+split <- sample.split(y, SplitRatio = 0.8) # This should work now
+X_train <- subset(X, split == TRUE)
+X_test <- subset(X, split == FALSE)
+y_train <- y[split == TRUE]
+y_test <- y[split == FALSE]
+
+
+# Fit linear regression model
+model <- lm(y_train ~ ., data = X_train)
+
+# Make predictions on the test set
+y_pred <- predict(model, newdata = X_test)
+
+# Calculate Mean Squared Error
+mse <- mean((y_test - y_pred)^2)
+cat("Mean Squared Error:", mse, "\n")
+
+# Scatter plot of predicted vs actual values
+plot_ly(x = y_test, y = y_pred, type = "scatter", mode = "markers") %>%
+  layout(title = "Predicted vs Actual Renewable Energy Share",
+         xaxis = list(title = "Actual Renewable Energy Share"),
+         yaxis = list(title = "Predicted Renewable Energy Share"))
+```
+
+There seems to be a positive correlation between actual and predicted values, which is expected in a well-functioning model.
+
+There are some potential outliers or high-leverage points, especially in the upper region of the plot, where actual shares are high but predicted shares vary widely.
+
+
+## Now considering last values of Previous data we will be predicting next 5 years values using linear regression model
+
+
+```{r}
+
+# Get the last known values for each predictor
+last_values <- tail(global_co2, 1)
+
+# Create a dataframe for future years
+future_years <- data.frame(
+  year = 2021:2025,
+  E15 = rep(last_values$E15, 5),
+  E10 = rep(last_values$E10, 5),
+  E1 = rep(last_values$E1, 5),
+  E12 = rep(last_values$E12, 5)
+)
+
+# Predict renewable energy share for 2021-2025
+predicted_values <- predict(model, newdata = future_years)
+
+# Display the predicted values
+predicted_values
+
+
+```
+
+
+# Global C02 Emission
+
+
+```{r}
+
+
+# Load necessary libraries
+library(tidyverse)
+library(ggplot2)
+library(leaflet)
+library(plotly)
+library(dplyr)
+
+# Read the CSV file
+global_co2 <- read.csv("final_energy_df.csv")
+
+
+head(global_co2)
+colnames(global_co2)
+dim(global_co2)
+str(global_co2)
+summary(global_co2)
+
+
+```
+
+As there are no missing values we can move for further steps:
+
+```{r}
+
+library(plotly)
+
+# Assuming global_co2 is defined elsewhere and has 'country', 'year', and 'E12' columns
+
+# Check country codes and convert them to ISO-3 if necessary
+# You can use the countrycode or rworldmap package to convert country names to ISO-3 codes
+
+# Transform the data to a long format for plotting
+co2_emission_long <- reshape2::melt(global_co2, id.vars = 'country', variable.name = 'year', value.name = 'co2_emissions')
+
+# Make sure that the year column is a factor, as required for the animation_frame argument in plot_ly
+co2_emission_long$year <- as.factor(co2_emission_long$year)
+
+# Create the choropleth map
+plot_map <- function(data, title) {
+  p <- plot_ly(data = data, 
+               locations = ~country,
+               locationmode = "country names",
+               z = ~co2_emissions, # Use 'z' instead of 'color' for the choropleth map
+               text = ~paste(country, co2_emissions), # Set hover text
+               type = "choropleth",
+               colors = "RdYlGn",
+               marker = list(line = list(color = "rgb(255,255,255)", width = 2)), # Set country borders
+               colorbar = list(title = "CO2 Emissions"), # Set colorbar title
+               animation_frame = ~year) %>% # Set animation frame to year
+    layout(
+      title = title,
+      geo = list(
+        showframe = FALSE,
+        showcoastlines = TRUE,
+        projection = list(type = 'natural earth')
+      )
+    )
+  return(p)
+}
+
+# Run the plotting function with the co2_emission_long data frame
+fig <- plot_map(co2_emission_long, "CO2 Emissions Over Time")
+fig # This will display the plot in your R environment
+
+
+```
+
+
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+# Select the necessary columns and calculate the average of E12 for each country
+country_avg_E12 <- global_co2 %>%
+  select(country, E12) %>%
+  group_by(country) %>%
+  summarize(average_E12 = mean(E12, na.rm = TRUE)) %>%
+  ungroup() %>%
+  arrange(desc(average_E12))
+
+# Display the first 6 countries and their average E12 values
+top_countries_avg_E12 <- head(country_avg_E12, 6)
+print(top_countries_avg_E12)
+
+# Plot a bar plot for the top 5 countries based on their average E12 value
+# Map the fill aesthetic to the country to get different colors for each bar
+ggplot(head(country_avg_E12, 5), aes(x = reorder(country, -average_E12), y = average_E12, fill = country)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Top 5 Countries with the Highest Average E12",
+       x = "Country",
+       y = "Average E12") +
+  theme_minimal() +
+  scale_fill_discrete(name = "Country") # Optional: to add a legend title
+```
+
+Top lowest avaerage co2 emsiion vs  contriees
+
+```{r}
+
+library(dplyr)
+library(ggplot2)
+
+# Select the necessary columns and calculate the average of E12 for each country
+country_avg_E12 <- global_co2 %>%
+  select(country, E12) %>%
+  group_by(country) %>%
+  summarize(average_E12 = mean(E12, na.rm = TRUE)) %>%
+  ungroup() %>%
+  arrange(average_E12)
+
+# Display the first 6 countries and their average E12 values
+bottom_countries_avg_E12 <- head(country_avg_E12, 6)
+print(bottom_countries_avg_E12)
+
+# Plot a bar plot for the 5 countries with the lowest average E12 value
+# Map the fill aesthetic to the country to get different colors for each bar
+ggplot(head(country_avg_E12, 5), aes(x = reorder(country, average_E12), y = average_E12, fill = country)) +
+  geom_bar(stat = "identity") +
+  labs(title = "5 Countries with the Lowest Average E12",
+       x = "Country",
+       y = "Average E12") +
+  theme_minimal() +
+  scale_fill_discrete(name = "Country") # Optional: to add a legend title
+
+```
+
+
+# 4.2.3. Average growth of CO2 emission over the years¶
+
+```{r}
+library(dplyr)
+
+# Assuming your data frame is named global_co2 and it has a column named "year" and "co2_emission"
+# Calculate the total CO2 emissions for each year
+yearly_total_co2 <- global_co2 %>%
+  group_by(year) %>%
+  summarize(total_co2_emission = sum(E12, na.rm = TRUE))
+
+# Calculate the growth rate for each year
+yearly_total_co2 <- yearly_total_co2 %>%
+  mutate(growth_rate = (total_co2_emission - lag(total_co2_emission)) / lag(total_co2_emission) * 100)
+
+# Calculate the average growth rate
+average_growth_rate <- mean(yearly_total_co2$growth_rate, na.rm = TRUE)
+
+
+yearly_total_co2
+
+# Print the result
+cat("Average Growth Rate of CO2 Emissions:", round(average_growth_rate, 2), "%\n")
+```
+# Average Growth of CO2 Emissions Over the Years
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+# Assuming your data frame is named global_co2 and it has columns "year" and "E12" for CO2 emissions
+
+# Calculate the average CO2 emissions for each year
+yearly_avg_co2 <- global_co2 %>%
+  group_by(year) %>%
+  summarize(average_E12 = mean(E12, na.rm = TRUE))
+
+# Create a line plot
+ggplot(yearly_avg_co2, aes(x = year, y = average_E12)) +
+  geom_line() +
+  labs(title = "Average CO2 Emissions (E12) Over the Years",
+       x = "Year",
+       y = "Average CO2 Emissions (E12)") +
+  theme_minimal()
+
+
+```
+
+Predicting Global Energy Consumption Trends(for co2 emission)
+
+
+
+```{r}
+
+
+# Load required libraries
+library(caret)
+library(ranger) # ranger is used instead of randomForest
+library(xgboost)
+
+# Assuming you have a data frame named 'global_co2' with columns 'country' and 'E12'
+
+# Convert 'country' to a numeric variable
+global_co2$country_code <- as.numeric(as.factor(global_co2$country))
+
+# Prepare the data
+X <- global_co2[, !(colnames(global_co2) %in% c("E12", "country"))] # Remove 'country' and use 'country_code' instead
+y <- global_co2$E12
+
+# Split the data into training and testing sets
+set.seed(42)  # Set random seed for reproducibility
+train_indices <- createDataPartition(y, p = 0.8, list = FALSE)
+X_train <- X[train_indices, ]
+y_train <- y[train_indices]
+X_test <- X[-train_indices, ]
+y_test <- y[-train_indices]
+
+# Create a list of regression models
+set.seed(42) # Set the seed before training the models
+models <- list(
+  'Linear Regression' = lm(E12 ~ ., data = data.frame(E12 = y_train, X_train)),
+  'Random Forest' = ranger(E12 ~ ., data = data.frame(E12 = y_train, X_train), num.trees = 500),
+  'Gradient Boosting' = train(E12 ~ ., data = data.frame(E12 = y_train, X_train), method = 'gbm', verbose = FALSE)
+)
+
+best_model <- NULL
+best_r2 <- -Inf # Start with negative infinity for comparison
+
+# Load Metrics library for R2 and MAE functions
+library(Metrics)
+
+for (model_name in names(models)) {
+  model <- models[[model_name]]
+  
+  # Predict on the test set
+  if (model_name == "Random Forest") {
+    y_pred <- predict(model, data = X_test)$predictions # Use ranger's predict method
+  } else {
+    y_pred <- predict(model, newdata = X_test)
+  }
+  
+  # Evaluate the model
+  r2 <- R2(y_test, y_pred)
+  mae <- mae(y_test, y_pred)
+  mse <- mean((y_test - y_pred)^2)
+  rmse <- sqrt(mse)
+  
+  # Create a dataframe for comparison
+  submit <- data.frame('Actual E12' = y_test, 'Predicted_E12' = y_pred)
+  submit <- cbind(index = as.numeric(rownames(submit)), submit)
+  
+  if (r2 > best_r2) {
+    best_r2 <- r2
+    best_model <- model_name
+  }
+  
+  cat(paste(model_name, ":\n"))
+  cat(paste("R2 Score:", format(r2, digits = 2), "\n"))
+  cat(paste("Mean Absolute Error (MAE):", format(mae, big.mark = ","), "\n"))
+  cat(paste("Mean Squared Error (MSE):", format(mse, scientific = TRUE), "\n"))
+  cat(paste("Root Mean Squared Error (RMSE):", format(rmse, big.mark = ","), "\n"))
+  print(head(submit, 5))  # Print only the first 5 rows for brevity
+  cat("------------------------------------------------\n")
+}
+
+cat(paste("The best performing model is:", best_model, "with R2 score:", format(best_r2, digits = 2), "\n"))
+
+```
+
+From above analysis The best performing model is: Random Forest with R2 score: 0.99 which is approx equal to 1.
+
